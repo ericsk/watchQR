@@ -68,11 +68,11 @@ This generates:
 * Watch APK: `wear/build/outputs/apk/debug/wear-debug.apk`
 
 ### 2. Launch Emulators / Devices
-Ensure you have a phone emulator (e.g. `Pixel_9a`) with Google Play Store support and a Wear OS watch emulator (e.g. `Pixel_Watch_3`). 
+Ensure you have a phone emulator (e.g. `medium_phone`) with Google Play Store support and a Wear OS watch emulator (e.g. `Pixel_Watch_3`). 
 
 Start them from CLI or Android Studio:
 ```bash
-android emulator start Pixel_9a
+android emulator start medium_phone
 android emulator start Pixel_Watch_3
 ```
 
@@ -84,17 +84,19 @@ Because the Wearable Data Layer relies on system-level pairing to transfer data:
 4. Follow the **Wear OS Emulator Pairing Assistant** to link the devices. Android Studio will automatically install the Wear OS companion services on the phone emulator to resolve GMS connection errors (e.g., `failed 17`).
 
 ### 4. Deploy the Apps
+Use `adb devices` to check the serial IDs of your running emulators (typically `emulator-5554` for the first device, `emulator-5556` for the second).
+
 Deploy the mobile app to the phone and the Wear app to the watch:
 ```bash
-# Install to Phone
-adb -s emulator-5554 install -r ./app/build/outputs/apk/debug/app-debug.apk
-# Install to Watch
-adb -s emulator-5556 install -r ./wear/build/outputs/apk/debug/wear-debug.apk
+# Install to Phone (Replace <phone-device-id> with actual ID, e.g., emulator-5554)
+adb -s <phone-device-id> install -r ./app/build/outputs/apk/debug/app-debug.apk
+# Install to Watch (Replace <watch-device-id> with actual ID, e.g., emulator-5556)
+adb -s <watch-device-id> install -r ./wear/build/outputs/apk/debug/wear-debug.apk
 
 # Launch Phone App
-adb -s emulator-5554 shell am start -n com.example.watchqr/com.example.watchqr.MainActivity
+adb -s <phone-device-id> shell am start -n com.example.watchqr/com.example.watchqr.MainActivity
 # Launch Watch App
-adb -s emulator-5556 shell am start -n com.example.watchqr/com.example.watchqr.MainActivity
+adb -s <watch-device-id> shell am start -n com.example.watchqr/com.example.watchqr.MainActivity
 ```
 
 ---

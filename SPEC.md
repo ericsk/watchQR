@@ -10,14 +10,14 @@ This document defines the technical specifications, system architecture, and the
 
 ```mermaid
 graph TD
-    subgraph Handheld Phone (:app)
+    subgraph "Handheld Phone (:app)"
         A[Phone UI: Text Input] --> B[Local QR Preview]
         A --> C[Wearable Data Client]
-    )
-    subgraph Google Play Services
+    end
+    subgraph "Google Play Services"
         C -->|Wear OS Data Layer API /qrcode| D[Buffered Local Sync]
     end
-    subgraph Pixel Watch (:wear)
+    subgraph "Pixel Watch (:wear)"
         D --> E[Wear Data Client Listener]
         E --> F[Watch Local QR Generator]
         F --> G[Wear UI: Rounded QR Display]

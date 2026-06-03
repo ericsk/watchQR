@@ -27,15 +27,15 @@ This codebase consists of a root project with a multi-module Gradle layout:
 
 ```mermaid
 graph TD
-    subgraph Handheld Phone (:app)
+    subgraph "Handheld Phone (:app)"
         A[Phone UI: Text Input] --> B[Format Selector: QR/Barcode]
         B --> C[Local Glow Preview]
         B --> D[Wearable Data Client]
     end
-    subgraph Google Play Services
+    subgraph "Google Play Services"
         D -->|Wear OS Data Layer API /qrcode| E[Buffered Sync Link]
     end
-    subgraph Pixel Watch (:wear)
+    subgraph "Pixel Watch (:wear)"
         E --> F[Wear Data Client Listener]
         F --> G[Dynamic Pixel-Crop Generator]
         G --> H[Window Brightness Max Override]

@@ -219,7 +219,15 @@ fun CompanionScreen() {
 
                 Box(
                     modifier = Modifier
-                        .size(230.dp)
+                        .then(
+                            if (selectedType == "QR_CODE") {
+                                Modifier.size(280.dp)
+                            } else {
+                                Modifier
+                                    .fillMaxWidth()
+                                    .height(140.dp)
+                            }
+                        )
                         .clip(RoundedCornerShape(24.dp))
                         .background(Color.White.copy(alpha = 0.07f))
                         .border(

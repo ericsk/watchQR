@@ -62,6 +62,8 @@ class MainActivity : ComponentActivity(), DataClient.OnDataChangedListener {
         setContent {
             WearApp(qrCodeText = qrCodeText, qrCodeBitmap = qrCodeBitmap, codeType = codeType)
         }
+        // Initialize with a default placeholder QR code on startup so the screen is never blank
+        updateCode("watchQR", "QR_CODE")
     }
 
     override fun onResume() {
@@ -164,10 +166,17 @@ fun WearApp(qrCodeText: String, qrCodeBitmap: Bitmap?, codeType: String) {
             ) {
                 if (qrCodeBitmap != null) {
                     if (codeType == "QR_CODE") {
-                        // Maximum safe square size for circular watch faces to prevent corner clipping
+                        val configuration = androidx.compose.ui.platform.LocalConfiguration.current
+                        val screenWidth = configuration.screenWidthDp
+                        val isRound = configuration.isScreenRound
+                        val qrSize = if (isRound) {
+                            (screenWidth * 0.75f).dp // Diagonal fits completely within the circular screen
+                        } else {
+                            165.dp
+                        }
                         Box(
                             modifier = Modifier
-                                .size(165.dp)
+                                .size(qrSize)
                                 .clip(RoundedCornerShape(8.dp))
                                 .background(Color.White)
                                 .padding(3.dp),

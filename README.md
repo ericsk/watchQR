@@ -19,6 +19,20 @@
 
 ---
 
+## 📸 Screenshots
+
+### Android Phone Companion App
+
+| QR Code Mode (280dp Square Preview) | Barcode Mode (Dynamic Banner Preview) |
+| :---: | :---: |
+| <img src="screenshots/phone_qrcode.png" width="300" /> | <img src="screenshots/phone_barcode.png" width="300" /> |
+
+### Wear OS App
+
+<img src="screenshots/watch_synced.png" width="200" />
+
+---
+
 ## 🏗️ Architecture & Collaboration Model
 
 This codebase consists of a root project with a multi-module Gradle layout:

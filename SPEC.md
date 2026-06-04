@@ -85,7 +85,7 @@ sequenceDiagram
 * **Responsibility**: Implement the phone companion application (`:app` module).
 * **Outputs**:
   * `app/build.gradle.kts`
-  * `app/src/main/java/com/example/watchqr/MainActivity.kt` (Phone UI & sync action)
+  * `app/src/main/java/org/ericsk/android/watchQR/MainActivity.kt` (Phone UI & sync action)
   * QR Code preview renderer helper on the phone side.
 
 #### Agent C: Wear OS Developer Agent (Subagent)
@@ -93,7 +93,7 @@ sequenceDiagram
 * **Outputs**:
   * `wear/build.gradle.kts`
   * `wear/src/main/AndroidManifest.xml` (including Wear OS hardware tags)
-  * `wear/src/main/java/com/example/watchqr/MainActivity.kt` (Wear OS UI, Data Layer listener, and local ZXing bitmap generator)
+  * `wear/src/main/java/org/ericsk/android/watchQR/MainActivity.kt` (Wear OS UI, Data Layer listener, and local ZXing bitmap generator)
 
 ---
 

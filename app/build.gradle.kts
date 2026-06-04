@@ -5,10 +5,10 @@ plugins {
 }
 
 android {
-    namespace = "com.example.watchqr"
+    namespace = "org.ericsk.android.watchQR"
     compileSdk = 36
     defaultConfig {
-        applicationId = "com.example.watchqr"
+        applicationId = "org.ericsk.android.watchQR"
         minSdk = 24
         targetSdk = 36
         versionCode = 1

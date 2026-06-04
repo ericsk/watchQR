@@ -94,9 +94,9 @@ adb -s <phone-device-id> install -r ./app/build/outputs/apk/debug/app-debug.apk
 adb -s <watch-device-id> install -r ./wear/build/outputs/apk/debug/wear-debug.apk
 
 # Launch Phone App
-adb -s <phone-device-id> shell am start -n com.example.watchqr/com.example.watchqr.MainActivity
+adb -s <phone-device-id> shell am start -n org.ericsk.android.watchQR/org.ericsk.android.watchQR.MainActivity
 # Launch Watch App
-adb -s <watch-device-id> shell am start -n com.example.watchqr/com.example.watchqr.MainActivity
+adb -s <watch-device-id> shell am start -n org.ericsk.android.watchQR/org.ericsk.android.watchQR.MainActivity
 ```
 
 ---

@@ -85,6 +85,8 @@ import com.google.android.gms.wearable.Wearable
 import com.google.zxing.BarcodeFormat
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -238,19 +240,24 @@ fun CompanionScreen() {
                         .padding(6.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    val qrBitmap = remember(inputText, selectedType) {
+                    var qrBitmap by remember(inputText, selectedType) { mutableStateOf<Bitmap?>(null) }
+
+                    LaunchedEffect(inputText, selectedType) {
                         if (inputText.isNotEmpty()) {
-                            if (selectedType == "QR_CODE") {
-                                QrCodeGenerator.generateCode(inputText, BarcodeFormat.QR_CODE, 400, 400)
-                            } else {
-                                QrCodeGenerator.generateCode(inputText, BarcodeFormat.CODE_128, 500, 150)
+                            qrBitmap = withContext(Dispatchers.Default) {
+                                if (selectedType == "QR_CODE") {
+                                    QrCodeGenerator.generateCode(inputText, BarcodeFormat.QR_CODE, 400, 400)
+                                } else {
+                                    QrCodeGenerator.generateCode(inputText, BarcodeFormat.CODE_128, 500, 150)
+                                }
                             }
                         } else {
-                            null
+                            qrBitmap = null
                         }
                     }
 
-                    if (qrBitmap != null) {
+                    val currentBitmap = qrBitmap
+                    if (currentBitmap != null) {
                         Card(
                             shape = RoundedCornerShape(16.dp),
                             colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -261,7 +268,7 @@ fun CompanionScreen() {
                                 contentAlignment = Alignment.Center
                             ) {
                                 Image(
-                                    bitmap = qrBitmap.asImageBitmap(),
+                                    bitmap = currentBitmap.asImageBitmap(),
                                     contentDescription = "QR Code Preview",
                                     modifier = Modifier.fillMaxSize()
                                 )

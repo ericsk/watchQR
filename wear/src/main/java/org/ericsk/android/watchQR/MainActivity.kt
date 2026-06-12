@@ -44,6 +44,7 @@ import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.Wearable
 import com.google.zxing.BarcodeFormat
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -56,6 +57,7 @@ class MainActivity : ComponentActivity(), DataClient.OnDataChangedListener {
     private var qrCodeText by mutableStateOf("")
     private var codeType by mutableStateOf("QR_CODE") // "QR_CODE" or "BARCODE"
     private var qrCodeBitmap by mutableStateOf<Bitmap?>(null)
+    private var generateJob: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +71,11 @@ class MainActivity : ComponentActivity(), DataClient.OnDataChangedListener {
     override fun onResume() {
         super.onResume()
         Wearable.getDataClient(this).addListener(this)
+
+        // Immediately boost brightness if a code is already cached/present (minimizes latency on wake)
+        if (qrCodeBitmap != null) {
+            setScreenBrightness(true)
+        }
 
         // Query last synced QR code from local data items on startup
         val uri = Uri.parse("wear://*/qrcode")
@@ -85,15 +92,9 @@ class MainActivity : ComponentActivity(), DataClient.OnDataChangedListener {
                         }
                     }
                 }
-                if (qrCodeBitmap != null) {
-                    setScreenBrightness(true)
-                }
             }
             .addOnFailureListener { e ->
                 Log.e(tag, "Failed to fetch QR code on startup", e)
-                if (qrCodeBitmap != null) {
-                    setScreenBrightness(true)
-                }
             }
     }
 
@@ -119,6 +120,7 @@ class MainActivity : ComponentActivity(), DataClient.OnDataChangedListener {
 
     private fun updateCode(text: String, type: String) {
         if (text.isEmpty()) {
+            generateJob?.cancel()
             qrCodeText = ""
             codeType = "QR_CODE"
             qrCodeBitmap = null
@@ -128,7 +130,9 @@ class MainActivity : ComponentActivity(), DataClient.OnDataChangedListener {
         if (text == qrCodeText && type == codeType && qrCodeBitmap != null) return
         qrCodeText = text
         codeType = type
-        lifecycleScope.launch {
+
+        generateJob?.cancel()
+        generateJob = lifecycleScope.launch {
             val bitmap = withContext(Dispatchers.Default) {
                 if (type == "QR_CODE") {
                     QrCodeGenerator.generateCode(text, BarcodeFormat.QR_CODE, 300, 300)
